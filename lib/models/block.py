@@ -1,8 +1,8 @@
 from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.orm import relationship, validates
-from db import Base
+from db import Base,SessionLocal
 
-
+Session=SessionLocal
 
 class Block(Base):
     __tablename__ = 'blocks'
