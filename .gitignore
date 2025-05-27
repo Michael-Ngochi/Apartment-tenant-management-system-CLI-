@@ -1,0 +1,51 @@
+# Byte-compiled / cache files
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pkl
+
+# SQLite database files
+*.sqlite3
+*.db
+
+# Environment & IDE stuff
+.venv/
+env/
+venv/
+.env
+*.env
+*.DS_Store
+*.swp
+*.swo
+
+# PyCharm
+.idea/
+
+# VS Code
+.vscode/
+.history/
+
+# Logs
+*.log
+
+# Jupyter notebooks checkpoints
+.ipynb_checkpoints/
+
+# Test coverage / pytest / pipenv
+.coverage
+*.cover
+*.pytest_cache/
+pip-log.txt
+pip-delete-this-directory.txt
+
+# PyInstaller
+dist/
+build/
+*.spec
+
+# Unit test cache
+__snapshots__/
+.cache/
+nosetests.xml
+test-output/
