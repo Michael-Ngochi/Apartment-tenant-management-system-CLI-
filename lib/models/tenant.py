@@ -1,6 +1,8 @@
-from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy import Column, Integer, String, ForeignKey,extract
 from sqlalchemy.orm import relationship, validates
 from db import Base,SessionLocal
+from models.unit import Unit
+from models.payment import Payment
 Session=SessionLocal
 
 class Tenant(Base):
@@ -79,3 +81,18 @@ class Tenant(Base):
         session.commit()
         print(f"Tenant '{tenant.name}' deleted.")
         return True
+    @classmethod
+    def get_defaulters(cls, session: Session, month: int, year: int):
+        tenants = session.query(cls).all()
+        defaulters = []
+
+        for tenant in tenants:
+            paid = session.query(Payment).filter(
+                Payment.tenant_id == tenant.id,
+                Payment.month == month,
+                Payment.year == year
+            ).first()
+            if not paid:
+                defaulters.append(tenant)
+
+        return defaulters

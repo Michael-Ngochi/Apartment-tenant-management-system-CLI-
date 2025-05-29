@@ -1,3 +1,4 @@
+click==8.2.1
 Faker==37.3.0
 greenlet==3.2.2
 SQLAlchemy==2.0.41
