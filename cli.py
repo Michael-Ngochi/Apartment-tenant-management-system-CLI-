@@ -13,7 +13,7 @@ from models.payment import Payment
 ACTIONS = [
     "Add Block", "List Blocks",
     "Add Unit", "List Vacant Units",
-    "Add Tenant", "List Tenants",
+    "Add Tenant", "List Tenants","Vacate Tenant",
     "Add Payment", "List Payments","Check Pending Payments",
     "Exit"
 ]
@@ -51,7 +51,7 @@ def main():
             click.echo("-----VACANT UNITS-----")
             if units:
                 for u in units:
-                    click.echo(f"Unit {u.number} in Block {u.block_id}")
+                    click.echo(f"[{u.id}]Unit {u.number} in Block {u.block.name}")
             else:
                 click.echo("All units are currently occupied.")
             click.echo("--------------------")
@@ -67,7 +67,7 @@ def main():
             tenants = Tenant.get_all(session)
             if tenants:
                 for t in tenants:
-                    click.echo(f"{t.id}. {t.name} – Unit {t.unit.number} (Block {t.unit.block_id})")
+                    click.echo(f"{t.id}. {t.name} – Unit {t.unit.number} (Block {t.unit.block.name})")
             else:
                 click.echo("No tenants found.")
 
@@ -84,6 +84,10 @@ def main():
                     click.echo(f"{p.date_paid} – {p.amount} KES")
             else:
                 click.echo("No payments found for this tenant.")
+                
+        elif action == "Vacate Tenant":
+            tenant_id = click.prompt("Enter the Tenant ID to vacate", type=int)
+            Tenant.vacate(session, tenant_id)
 
         elif action == "Check Pending Payments":
              month = click.prompt("Enter month (1–12)", type=int)

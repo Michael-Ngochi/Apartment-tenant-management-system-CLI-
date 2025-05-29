@@ -53,17 +53,6 @@ class Unit(Base):
         return unit
 
     @classmethod
-    def vacate(cls, session: Session, unit_id: int):
-        unit = cls.get_by_id(session, unit_id)
-        if not unit:
-            print("Unit not found.")
-            return
-        unit.is_occupied = False
-        session.commit()
-        print(f"Unit '{unit.number}' marked as vacant.")
-        return unit
-
-    @classmethod
     def delete(cls, session: Session, unit_id: int):
         unit = cls.get_by_id(session, unit_id)
         if not unit:

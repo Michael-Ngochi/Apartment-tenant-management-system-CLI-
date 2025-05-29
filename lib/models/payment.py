@@ -3,6 +3,7 @@ from datetime import date
 from sqlalchemy.orm import relationship, validates
 from db import Base,SessionLocal
 
+
 Session=SessionLocal
 
 class Payment(Base):
@@ -21,6 +22,7 @@ class Payment(Base):
 
     @classmethod
     def create(cls, session: Session, tenant_id: int, amount: float, date_paid: date = None):
+        from models.tenant import Tenant
         tenant = Tenant.get_by_id(session, tenant_id)
         if not tenant:
             print("Tenant not found.")
