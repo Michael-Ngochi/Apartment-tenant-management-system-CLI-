@@ -77,27 +77,59 @@ def main():
             Payment.create(session, tenant_id, amount)
 
         elif action == "List Payments":
-            tenant_id = click.prompt("Tenant ID", type=int)
-            payments = Payment.get_by_tenant(session, tenant_id)
-            if payments:
-                for p in payments:
-                    click.echo(f"{p.date_paid} – {p.amount} KES")
-            else:
-                click.echo("No payments found for this tenant.")
+             click.echo("\nView payments by:")
+             click.echo("1. All Payments")
+             click.echo("2. By Tenant ID")
+             click.echo("3. By Payment ID")
+         
+             option = click.prompt("Choose an option", type=click.IntRange(1, 3))
+         
+             if option == 1:
+                 payments = Payment.get_all(session)
+                 if payments:
+                     for p in payments:
+                         tenant = p.tenant
+                         click.echo(f"{p.id}: {tenant.name} – {p.amount} KES on {p.date_paid}")
+                 else:
+                     click.echo("No payments found.")
+         
+             elif option == 2:
+                 tenant_id = click.prompt("Tenant ID", type=int)
+                 payments = Payment.get_by_tenant(session, tenant_id)
+                 tenant = Tenant.get_by_id(session, tenant_id)
+                 if not tenant:
+                     click.echo("Tenant not found.")
+                 else:
+                     click.echo(f"\nPayments for {tenant.name}:\n")
+                     payments = Payment.get_by_tenant(session, tenant_id)
+                     if payments:
+                         for p in payments:
+                             click.echo(f"{p.id}: {p.amount} KES on {p.date_paid}")
+                     else:
+                         click.echo("No payments found for this tenant.")
+         
+             elif option == 3:
+                 payment_id = click.prompt("Payment ID", type=int)
+                 payment = Payment.get_by_id(session, payment_id)
+                 if payment:
+                     tenant = payment.tenant
+                     click.echo(f"{payment.id}: {tenant.name} – {payment.amount} KES on {payment.date_paid}")
+                 else:
+                     click.echo("Payment not found.")
                 
         elif action == "Vacate Tenant":
             tenant_id = click.prompt("Enter the Tenant ID to vacate", type=int)
             Tenant.vacate(session, tenant_id)
 
         elif action == "Check Pending Payments":
-             month = click.prompt("Enter month (1–12)", type=int)
+             month = click.prompt("Enter month (1-12)", type=int)
              year = click.prompt("Enter year", type=int)
              defaulters = Tenant.get_defaulters(session, month, year)
 
              if defaulters:
                  click.echo(f"\nTenants with pending payments for {month}/{year}:")
                  for t in defaulters:
-                     click.echo(f"{t.id}. {t.name} – Unit {t.unit.number} (Block {t.unit.block.name})")
+                     click.echo(f"{t.id}. {t.name} - Unit {t.unit.number} (Block {t.unit.block.name})")
              else:
                  click.echo(f"No pending payments for {month}/{year}.")
 
